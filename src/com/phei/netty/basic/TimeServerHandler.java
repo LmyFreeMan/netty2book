@@ -26,26 +26,31 @@ import io.netty.channel.ChannelHandlerContext;
  * @version 1.0
  */
 public class TimeServerHandler extends ChannelHandlerAdapter {
-
+    //读取客户端的内容发生的事件
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)
 	    throws Exception {
+    //将msg对象转成ByteBuf
 	ByteBuf buf = (ByteBuf) msg;
+	//根据可读字节创建byte数组
 	byte[] req = new byte[buf.readableBytes()];
+	//将buf复制到req数组中
 	buf.readBytes(req);
+	//得到新的字符串
 	String body = new String(req, "UTF-8");
 	System.out.println("The time server receive order : " + body);
 	String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new java.util.Date(
 		System.currentTimeMillis()).toString() : "BAD ORDER";
 	ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());
+	//发送给客户端
 	ctx.write(resp);
     }
-
+	//读取客户端的内容完成后发生的事件
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
 	ctx.flush();
     }
-
+    //发生异常是的事件
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
 	ctx.close();
