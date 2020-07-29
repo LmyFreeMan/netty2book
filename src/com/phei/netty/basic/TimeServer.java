@@ -45,7 +45,6 @@ public class TimeServer {
 		    .childHandler(new ChildChannelHandler());
 	    // 绑定端口，同步等待成功
 	    ChannelFuture f = b.bind(port).sync();
-
 	    // 等待服务端监听端口关闭
 	    f.channel().closeFuture().sync();
 	} finally {
@@ -54,15 +53,12 @@ public class TimeServer {
 	    workerGroup.shutdownGracefully();
 	}
     }
-
     private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 	@Override
-	protected void initChannel(SocketChannel arg0) throws Exception {
-	    arg0.pipeline().addLast(new TimeServerHandler());
+	protected void initChannel(SocketChannel socketChannel) throws Exception {
+		socketChannel.pipeline().addLast(new TimeServerHandler());
 	}
-
     }
-
     /**
      * @param args
      * @throws Exception
