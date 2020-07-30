@@ -70,6 +70,6 @@ public class TimeClient {
 		// 采用默认值
 	    }
 	}
-	new TimeClient().connect(port, "127.0.0.1");
+	new TimeClient().connect(port, "172.20.10.2");
     }
 }
